@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de assinatura</title>
+    <style>canvas {
+        width: 500px;
+        height: 500px;
+        border: 1px solid black;
+      }</style>
+</head>
+<body>
+    <h1>Assine abaixo:</h1>
+    <canvas id="canvas"></canvas>
+<script>
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+function onTouchStart(event) {
+  var x = event.touches[0].clientX;
+  var y = event.touches[0].clientY;
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+
+  previousX = x;
+  previousY = y;
+}
+
+function onTouchMove(event) {
+  var x = event.touches[0].clientX;
+  var y = event.touches[0].clientY;
+
+  ctx.beginPath();
+  ctx.moveTo(previousX, previousY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+
+  previousX = x;
+  previousY = y;
+}
+
+function onTouchEnd(event) {
+  var x = event.changedTouches[0].clientX;
+  var y = event.changedTouches[0].clientY;
+
+  ctx.beginPath();
+  ctx.moveTo(previousX, previousY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+
+  var signature = canvas.toDataURL();
+  var file = new File([signature], "signature.png");
+  file.saveAs("signature.png");
+}
+
+window.onload = function() {
+  canvas.addEventListener("touchstart", onTouchStart);
+  canvas.addEventListener("touchmove", onTouchMove);
+  canvas.addEventListener("touchend", onTouchEnd);
+};
+</script>
+</body>
+</html>
